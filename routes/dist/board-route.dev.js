@@ -16,8 +16,9 @@ var pugs = {
   headerTitle: 'Node/Express를 활용한 게시판'
 };
 router.get('/', function (req, res, next) {
-  var pug = _objectSpread({}, pugs);
-
-  res.render('board/list', pug);
+  res.render('board/list', _objectSpread({}, pugs));
+});
+router.get('/create', function (req, res, next) {
+  res.render('board/create', pugs);
 });
 module.exports = router;
