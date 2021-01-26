@@ -1,0 +1,37 @@
+@charset "UTF-8";
+/* Color */
+/* 폰트 */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sunflower:wght@300;500&display=swap");
+html, body {
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.wrapper {
+  max-width: 1200px;
+  margin: auto;
+}
+
+a:link {
+  color: inherit;
+}
+a:visited {
+  color: inherit;
+}
+a:active {
+  color: inherit;
+}
+a:hover {
+  color: inherit;
+}
+
+header .top-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  color: #eee;
+  background-color: #333;
+}
+header .top-wrapper a {
+  padding: 0.25em 1em;
+}

@@ -1,0 +1,28 @@
+@import './mixin';
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sunflower:wght@300;500&display=swap');
+
+html, body {font-family: $notoKr;}
+.wrapper {max-width: 1200px; margin: auto;}
+
+a {
+  &:link {color: inherit;}
+  &:visited {color: inherit;}
+  &:active {color: inherit;}
+  &:hover {color: inherit;}
+}
+
+header {
+  .top-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    color: $colorWhite;
+    background-color: $colorDarker;
+    a {padding: 0.25em 1em;}
+  }
+  .header-wrapper {
+
+  }
+}
