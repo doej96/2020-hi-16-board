@@ -1,0 +1,46 @@
+/*********** Import ***********/
+require('dotenv').config();
+const express = require('express')
+const app = express();
+const path = require('path')
+const { err } = require('./modules/util')
+
+/*********** Server ***********/
+app.listen(process.env.PORT, () => {
+  console.log('======================')
+  console.log('http://127.0.0.1:'+process.env.PORT)
+  console.log('======================')
+});
+
+/*********** View/pug ***********/
+app.set('view engine', 'pug')
+app.set('views', path.join(__dirname, 'views'))
+app.locals.pretty = true;
+
+/*********** POST/Body ***********/
+app.use(express.json())
+app.use(express.urlencoded({extended: false}))
+//body를 parsing, 미들웨어(use)
+
+/*********** Router ***********/
+const authRouter = require('./routes/auth-route')
+const boardRouter = require('./routes/board-route')
+const apiRouter = require('./routes/api-route')
+const galleryRouter = require('./routes/gallery-route')
+
+app.use('/', express.static(path.join(__dirname, 'public')))
+app.use('/auth', authRouter)
+app.use('/board', boardRouter)
+app.use('/api', apiRouter)
+app.use('/gallery', galleryRouter)
+
+/*********** Error ***********/
+app.use((req, res, next) => {
+  next(err(404))
+})
+
+app.use((err, req, res, next) => {
+  res.render('error', err) //err:전달받은 err객체
+})
+
+
