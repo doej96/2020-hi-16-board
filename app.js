@@ -29,6 +29,9 @@ const apiRouter = require('./routes/api-route')
 const galleryRouter = require('./routes/gallery-route')
 
 app.use('/', express.static(path.join(__dirname, 'public')))
+app.use('/storages', express.static(path.join(__dirname, 'uploads')))
+//브라우저의 root는 public이기 때문에 root(public)밖에 있는 uploads 불러서 사진 띄우려면 static으로 불러야함
+//해킹방지 위해 이름 다르게 설정, storages라고 치면 uploads폴더 뜸
 app.use('/auth', authRouter)
 app.use('/board', boardRouter)
 app.use('/api', apiRouter)
