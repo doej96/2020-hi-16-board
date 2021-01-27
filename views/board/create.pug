@@ -2,11 +2,10 @@ extends ../layout/layout-default
 block js
 	script(src=`https://cdn.tiny.cloud/1/${tinyKey}/tinymce/5/tinymce.min.js` referrerpolicy="origin")
 	script(src="/js/editor.js")
-
 block content
 	.create-wrapper.wrapper
 		include ../include/title-bar
-		form(action="/board/save" method="post" onsubmit="return onSave(this);")
+		form(action="/board/save" method="post" onsubmit="return onSave(this);" enctype="multipart/form-data")
 			ul.list-wrapper
 				li.list-wrap
 					.title 제목
@@ -23,5 +22,5 @@ block content
 				li.list-wrap
 					.w-100
 						textarea#content.form-control(name="content")
-		.text-center.py-4
-			button.btn.btn-primary 저장
+			.text-center.py-4
+				button.btn.btn-primary 저장
