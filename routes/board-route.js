@@ -27,7 +27,7 @@ router.post('/save', upload.single('upfile'), async (req, res, next) => { //upfi
     const value = [title, content, writer];
     if(req.banExt) {
       //history.go(-1)
-      res.send(alert(`${req.banExt}파일은 업로드 할 수 없습니다.`));
+      res.send(alert(`${req.banExt} 파일은 업로드 할 수 없습니다.`));
       //next(err(`${req.banExt}파일은 업로드 할 수 없습니다.`))
     }
     else {
@@ -36,11 +36,12 @@ router.post('/save', upload.single('upfile'), async (req, res, next) => { //upfi
         value.push(req.file.originalname, req.file.filename)
       }
       const r = await pool.query(sql, value);
-      res.json(req.file);
+      res.redirect('/board');
       }
     }
 	catch(e) {
-		next(err(e));
+    res.json(e)
+		//next(err(e));
 	}
 });
 
