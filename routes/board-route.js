@@ -7,7 +7,8 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/create', (req, res, next) => {
-  res.render('board/create', pugs);
+  const pug = { ...pugs, tinyKey: 'qx4vtweateu7xp7hswelnwpv9s6tnhifw0pv0g3dd013z70t' }
+  res.render('board/create', pug);
 })
 
 module.exports = router;
