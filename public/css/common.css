@@ -26,8 +26,8 @@ a:not(.btn):link, a:not(.btn):visited, a:not(.btn):active, a:not(.btn):hover {
 }
 
 .pagination .page-item.active .page-link {
-  background-color: #e9914e;
-  border-color: #e9914e;
+  background-color: #fc8739;
+  border-color: #fc8739;
 }
 
 header .top-wrapper {
@@ -35,6 +35,12 @@ header .top-wrapper {
   background-color: #333;
   color: #eee;
   padding-right: 2em;
+}
+
+@media screen and (max-width: 767px) {
+  header .top-wrapper {
+    padding-right: 0;
+  }
 }
 
 header .top-wrapper .wrapper {
@@ -45,6 +51,12 @@ header .top-wrapper .wrapper {
 
 header .top-wrapper .wrapper a {
   padding: 0.5em 1em;
+}
+
+@media screen and (max-width: 767px) {
+  header .top-wrapper .wrapper a:last-child {
+    padding-right: 0;
+  }
 }
 
 header .header-wrapper {
@@ -81,7 +93,7 @@ header .header-wrapper .wrapper .logo-wrapper a span {
   font-size: 2em;
   font-family: "Open Sans", sans-serif;
   font-weight: 500;
-  color: #21284e;
+  color: #0f203f;
 }
 
 header .header-wrapper .wrapper .navi-wrapper {
@@ -95,13 +107,38 @@ header .header-wrapper .wrapper .navi-wrapper .navi {
 
 header .header-wrapper .wrapper .navi-wrapper .navi:hover {
   background-color: #eee;
-  color: #21284e;
+  color: #0f203f;
 }
 
 @media screen and (max-width: 767px) {
   header .header-wrapper .wrapper .navi-wrapper {
     display: none;
   }
+}
+
+header .header-wrapper .wrapper .mobile-wrapper {
+  display: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 767px) {
+  header .header-wrapper .wrapper .mobile-wrapper {
+    display: block;
+  }
+}
+
+header .mobile-sub {
+  position: absolute;
+  width: 100%;
+  display: none;
+}
+
+header .mobile-sub .sub {
+  color: #eee;
+  background-color: #444;
+  padding: 1.5em;
+  border-bottom: 1px solid #777;
 }
 
 .title-wrapper {

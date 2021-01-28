@@ -1,11 +1,11 @@
 @import './variables';
 
+
 @mixin flex($hori: flex-start, $vert: stretch) {
 	display: flex;
 	justify-content: $hori;
 	align-items: $vert;
 }
-// $vert 없으면 stretch가 기본
 
 @mixin flexCol {
 	flex-direction: column;

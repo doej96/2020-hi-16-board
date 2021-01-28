@@ -32,9 +32,17 @@ header {
 		background-color: $colorDarker;
 		color: $colorWhite;
 		padding-right: 2em;
+		@include tablet {
+			padding-right: 0;
+		}
 		.wrapper {
 			@include flex($FE, $CT);
-			a	{padding: 0.5em 1em;}
+			a	{
+				padding: 0.5em 1em;
+				@include tablet {
+					&:last-child {padding-right: 0;}
+				}
+			}
 		}
 	}
 	.header-wrapper {
@@ -62,6 +70,25 @@ header {
 					display: none;
 				}
 			}
+			.mobile-wrapper {
+				display: none;
+				font-size: 1.5em;
+				cursor: pointer;
+				@include tablet {
+					display: block;
+				}
+			}
+		}
+	}
+	.mobile-sub {
+		position: absolute;
+		width: 100%;
+		display: none;
+		.sub {
+			color: $colorWhite;
+			background-color: $colorDark;
+			padding: 1.5em;
+			border-bottom: 1px solid $colorGrey;
 		}
 	}
 }
@@ -76,7 +103,12 @@ header {
 @include desktop {
 	
 }
+
 @include laptop {
+
+}
+
+@include tablet {
 
 }
 
