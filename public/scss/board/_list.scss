@@ -7,6 +7,12 @@
 				color: $tbHeadTxt;
 				background-color: $tbHeadBg;
 				border-color: $tbHeadBorder;
+				min-width: 80px;
+				&:nth-child(1) {width: 8%;}
+				&:nth-child(3) {width: 15%;}
+				&:nth-child(4) {width: 5%;}
+				&:nth-child(5) {width: 10%;}
+				&:nth-child(6) {width: 8%;}
 			}
 		}
 		tbody {

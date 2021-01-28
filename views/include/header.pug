@@ -11,7 +11,16 @@ header
           .img-wrap
             img.w-100(src="/img/icon.png")
           span EUNJEONG
-      ul.navi-wrapper
+      .navi-wrapper
         a.navi(herf="/board") BOARD
         a.navi(herf="/api") API BOARD
         a.navi(herf="/gallery") GALLERY
+      .mobile-wrapper
+        i.fa.fa-bars.navi(onclick="onMoblie()")
+  ul.mobile-sub
+		li.sub
+			a(href="/board") BOARD
+		li.sub
+			a(href="/api") API BOARD
+		li.sub
+			a(href="/gallery") GALLERY
