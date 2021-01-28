@@ -12,31 +12,31 @@ const pugs = {
 	headerTitle: 'Node/Express를 활용한 게시판' 
 }
 
-router.get('/', (req, res, next) => {
-	res.render('board/list', { ...pugs });
-});
+router.get('/', async (req, res, next) => {
+	try {
+    // let sql = 'SELECT count(*) FROM board';
+    // let r = await pool.query(sql);
+    // res.json(r[0][0]); //count(*) = 데이터갯수
 
-router.get('/', async(req, res, next) => {
-  try {
-    let sql = 'SELECT * FROM board ORDER BY id DESC'
-    const r = await pool.query(sql);
-    const rs = r[0].map((v)=> {
-      v.wdate = moment(v.wdate).format('YYYY-MM-DD');
-      if(v.savefile) {
-        let ext = path.extname(v.savefile).substr(1).toLowerCase();
-        ext = (ext == 'jpeg') ? 'jpg' : ext;
-        ext = ext.substr(0, 3);
-        v.icon = `/img/ext/${ext}.png`;
-      }
-      else v.icon = '/img/empty.png'
-      return v;
-    });
-    res.render('board/list', {...pugs, rs})
-  }
-  catch(e) {
-    next(err(e.message))
-  }
-})
+		let sql = 'SELECT * FROM board ORDER BY id DESC';
+		const r = await pool.query(sql);
+		const rs = r[0].map((v) => {
+			v.wdate = moment(v.wdate).format('YYYY-MM-DD');
+			if(v.savefile) {
+				let ext = path.extname(v.savefile).substr(1).toLowerCase();
+				ext = (ext == 'jpeg') ? 'jpg': ext;
+				ext = ext.substr(0, 3);
+				v.icon = `/img/ext/${ext}.png`;
+			}
+			else v.icon = '/img/empty.png';
+			return v;
+		});
+		res.render('board/list', { ...pugs, rs });
+	}
+	catch(e) {
+		next(err(e.message));
+	}
+});
 
 router.get('/create', (req, res, next) => {
 	const pug = { ...pugs, tinyKey: process.env.TINY_KEY }
@@ -44,28 +44,27 @@ router.get('/create', (req, res, next) => {
 });
 
 router.post('/save', upload.single('upfile'), async (req, res, next) => { //upfile:필드명(input name)
-  console.log(req.file)
+  //console.log(req.file)
 	try {
 		const { title, content, writer } = req.body;
 		let sql = 'INSERT INTO board SET title=?, content=?, writer=?'; //sql을 const로 만들면 += 안됨
-    const value = [title, content, writer];
-    if(req.banExt) {
+		const value = [title, content, writer];
+		if(req.banExt) {
       //history.go(-1)
       res.send(alert(`${req.banExt} 파일은 업로드 할 수 없습니다.`));
       //next(err(`${req.banExt}파일은 업로드 할 수 없습니다.`))
-    }
-    else {
-      if(req.file) {
-        sql += ', orifile=?, savefile=?'
-        value.push(req.file.originalname, req.file.filename)
-      }
-      const r = await pool.query(sql, value);
-      res.redirect('/board');
-      }
-    }
+		}
+		else {
+			if(req.file) {
+				sql += ', orifile=?, savefile=?';
+				value.push(req.file.originalname, req.file.filename);
+			}
+			const r = await pool.query(sql, value);
+			res.redirect('/board');
+		}
+	}
 	catch(e) {
-    res.json(e)
-		//next(err(e));
+		next(err(e.message));
 	}
 });
 
