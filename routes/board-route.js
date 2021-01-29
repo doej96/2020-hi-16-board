@@ -13,6 +13,16 @@ const pugs = {
 	headerTitle: 'Node/Express를 활용한 게시판' 
 }
 
+router.get('/view/:id', async (req, res, next) => { //param으로 보냄 /view/:id
+	let sql, value, r, rs;
+	sql = 'SELECT * FROM board WHERE id=' + req.params.id;
+	r = await pool.query(sql);
+	r[0][0].created= moment(r[0][0].created).format('YYYY-MM-DD')
+	//res.json(r[0][0]);
+	res.render('board/view', {...pugs, rs: r[0][0] })
+}) 
+	
+
 router.get(['/', '/list'], async (req, res, next) => { // /:page(params) : 주소줄에 board/1 -> 1페이지
 	try {
 		let sql, value, r, rs, pager;
