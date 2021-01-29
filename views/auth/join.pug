@@ -1,0 +1,32 @@
+extends ../layout/layout-default
+block content
+  .join-wrapper.wrapper
+    form(name="joinForm" action="/auth/save" method="post" onsubmit="return onJoin(this)")
+      ul.join-wrap
+        li.list.userid
+          .title 아이디
+          .content
+            input.form-control(type="text" name="userid" placeholder="아이디" onblur="onBlurId(this);")
+            .comment
+        li.list.userpw
+          .title 패스워드
+          .content
+            input.form-control(type="text" name="userpw" placeholder="패스워드" onblur="onBlurPw(this);")
+            .comment
+        li.list.userpw2
+          .title 패스워드 확인
+          .content
+            input.form-control(type="text" name="userpw2" placeholder="패스워드 확인" onblur="onBlurPw2(this);")
+            .comment
+        li.list.username
+          .title 이름
+          .content
+            input.form-control(type="text" name="username" placeholder="이름")
+            .comment
+        li.list.email
+          .title 이메일
+          .content
+            input.form-control(type="text" name="email" placeholder="이메일" onblur="onBlurEmail(this);")
+            .comment
+      .text-center.py-3
+        button.btn.btn-success 가입

@@ -1,8 +1,7 @@
-@import '../mixin';
 
 .view-wrapper {
 	.list-wrap {
-		border-top: 1px solid $colorLigther;
+		border-top: 1px solid $colorLighter;
 		.list {
 			@include flex();
 			border-bottom: 1px solid $colorLighter;
