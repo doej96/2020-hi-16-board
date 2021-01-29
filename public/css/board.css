@@ -142,6 +142,14 @@
 
 .view-wrapper .list-wrap .list .content .thumb {
   max-width: 80px;
+  max-height: 80px;
+  margin-right: 1em;
+  cursor: pointer;
+}
+
+.view-wrapper .list-wrap .list:last-child {
+  display: block;
+  padding: 1em;
 }
 
 .view-wrapper .modal-wrapper {
@@ -159,10 +167,10 @@
 .view-wrapper .modal-wrapper .bt-close {
   width: 50px;
   height: 50px;
-  background-color: #f1f1f1;
+  background-color: #940a0a;
   color: #f1f1f1;
-  font-size: 1.25em;
   cursor: pointer;
+  font-size: 1.25em;
   display: flex;
   justify-content: center;
   align-items: center;
