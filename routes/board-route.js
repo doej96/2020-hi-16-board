@@ -14,12 +14,17 @@ const pugs = {
 }
 
 router.get('/view/:id', async (req, res, next) => { //param으로 보냄 /view/:id
-	let sql, value, r, rs;
+	let sql, r, file;
 	sql = 'SELECT * FROM board WHERE id=' + req.params.id;
 	r = await pool.query(sql);
-	r[0][0].created= moment(r[0][0].created).format('YYYY-MM-DD')
+	rs = r[0][0];
+	rs.created= moment(rs.created).format('YYYY-MM-DD');
+	file = {
+		//rs.filename = rs.oriname;
+		//rs.src = imgExt.includes(extName(rs.savefile)) ? srcPath(rs.savefile) : null
+	}
 	//res.json(r[0][0]);
-	res.render('board/view', {...pugs, rs: r[0][0] })
+	res.render('board/view', {...pugs, rs })
 }) 
 	
 

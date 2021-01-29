@@ -28,4 +28,12 @@ const alert = (msg) => {
   return `<script>alert('${msg}'); history.go(-1);</script>`
 }
 
-module.exports = { err, alert }
+const extName =(filename) => {
+  return path.extname(rs.oriname).substr(1).toLowerCase();
+}
+
+const srcPath = (filename) => {
+  return `/uploads/${filename.substr(0, 9)}/${filename}`;
+}
+
+module.exports = { err, alert, extName }
