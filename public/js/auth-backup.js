@@ -13,14 +13,7 @@ var passChk = false;
 var nameChk = false;
 var emailChk = false;
 
-function onJoin() {
-  onBlurId();
-  onBlurPass();
-}
-
-/* function onBlurId() {
-  var f = document.joinForm;
-  var el = f.userid;
+function onBlurId(el) {
   function onResponse(r) {
     if(r.result) {
       comment(el, '사용가능한 아이디입니다.', 'active');
@@ -40,38 +33,9 @@ function onJoin() {
     return false;
   }
   else {
-    var r = $.get('/auth/userid', { userid: userid }, onResponse);
-    var interval = setInterval(function() {
-      if(r.readyState == 4) {
-        console.log(r.responseJSON);
-        clearInterval(interval);
-      }
-    }, 1);
+    $.get('/auth/userid', { userid: userid }, onResponse);
   }
-} */
-
-function onBlurId(userid) {
-	
-	// jQuery
-	/* $.get('/auth/userid?userid='+el.value, function(r) {
-		console.log(r);
-	}); */
-	
-	// Javascript - Vanilla Script
-	var xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function() {
-	if (xhr.readyState === xhr.DONE) {
-			if (xhr.status === 200 || xhr.status === 201) {
-				return JSON.parse(xhr.responseText).result;
-			}
-		}
-	};
-	xhr.open('GET', '/auth/userid?userid='+userid);
-	xhr.send();
 }
-
-console.log(onBlurId('eunjeong', fn));
-
 function onBlurPw(el) {
   var pw = $(el).val().trim();
   var len = pw.length;
