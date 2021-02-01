@@ -53,16 +53,19 @@ router.post('/save', async (req, res, next) => {
 })
 
 router.post('/logon', async (req, res, next) => {
+  let Msg = '아이디 혹은 패스워드를 확인하세요.';
   let sql, value, r, rs;
   let { userid, userpw } = req.body;
   sql = 'SELECT userpw FROM auth WHERE userid=?';
   value = [userid];
   r = await pool.query(sql, value);
   if(r[0].length == 1) { //비밀번호 있어야 r[0] 존재
-    res.send('아이디 있음')
+    compare = await bcrypt.compare(userpw + process.env.BCRYPT_SALT, r[0][0].userpw);
+    if(compare) res.send('로그인됨');
+    else res.send(alert(Msg))
   }
   else{
-    res.send(alert('아이디가 존재하지 않습니다.'))
+    res.send(alert(Msg))
   }
 })
 
