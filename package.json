@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/doej96/2020-hi-16-board#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "fs-extra": "^9.1.0",
