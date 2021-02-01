@@ -11,17 +11,17 @@ block content
         li.list.userpw
           .title 패스워드
           .content
-            input.form-control(type="text" name="userpw" placeholder="패스워드" onblur="onBlurPw(this);")
+            input.form-control(type="password" name="userpw" placeholder="패스워드" onblur="onBlurPw(this);")
             .comment
         li.list.userpw2
           .title 패스워드 확인
           .content
-            input.form-control(type="text" name="userpw2" placeholder="패스워드 확인" onblur="onBlurPw2(this);")
+            input.form-control(type="password" name="userpw2" placeholder="패스워드 확인" onblur="onBlurPw2(this);")
             .comment
         li.list.username
           .title 이름
           .content
-            input.form-control(type="text" name="username" placeholder="이름")
+            input.form-control(type="text" name="username" placeholder="이름" onblur="onBlurName(this);")
             .comment
         li.list.email
           .title 이메일
