@@ -1,6 +1,14 @@
-/* 
-var $joinForm = $("form[name='joinForm']")
-$joinForm.find("input[name='userid']").blur(); */
+function onLogon(f) {
+  if (f.userid.value.trim() == "") {
+    f.userid.focus();
+    return false;
+  }
+  if (f.userpw.value.trim() == "") {
+    f.userpw.focus();
+    return false;
+  }
+  return true;
+}
 
 function comment(el, cmt, cls) {
   $(el).next().html(cmt);

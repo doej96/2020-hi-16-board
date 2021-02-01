@@ -1,6 +1,6 @@
 const express = require('express');
 const { pool } = require('../modules/mysql-pool');
-const { err } = require('../modules/util');
+const { err, alert } = require('../modules/util');
 const bcrypt = require('bcrypt');
 const router = express.Router();
 
@@ -10,7 +10,7 @@ const pugs = {
 	title: 'Express Board', 
 	headerTitle: 'Node/Express를 활용한 인증 구현' 
 }
-
+/* 
 router.get('/login', async (req, res, next) => {
   let sql, value, r, rs, compare;
   sql = 'SELECT userpw FROM auth WHERE userid=?';
@@ -18,9 +18,9 @@ router.get('/login', async (req, res, next) => {
   r = await pool.query(sql, value);
   //res.json(r[0][0]);
   compare = await bcrypt.compare('dmswjd96!' + process.env.BCRYPT_SALT, r[0][0].userpw);
-  res.json(compare);
+  //res.json(compare);
 })
-
+ */
 router.post('/save', async (req, res, next) => {
   try {
     let { userid, userpw, username, email } = req.body;
@@ -50,6 +50,26 @@ router.post('/save', async (req, res, next) => {
   catch(e) {
     next(err(e.message));
   }
+})
+
+router.post('/logon', async (req, res, next) => {
+  let sql, value, r, rs;
+  let { userid, userpw } = req.body;
+  sql = 'SELECT userpw FROM auth WHERE userid=?';
+  value = [userid];
+  r = await pool.query(sql, value);
+  if(r[0].length == 1) { //비밀번호 있어야 r[0] 존재
+    res.send('아이디 있음')
+  }
+  else{
+    res.send(alert('아이디가 존재하지 않습니다.'))
+  }
+})
+
+router.get('/login', (req, res, next) => {
+  const pug = { ...pugs }
+  pug.headerTitle += ' - 회원 로그인';
+  res.render('auth/login', { ...pug });
 })
 
 router.get('/join', (req, res, next) => {
