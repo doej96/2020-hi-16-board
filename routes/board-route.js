@@ -10,7 +10,7 @@ const pugs = {
 	css: 'board', 
 	js: 'board', 
 	title: 'Express Board', 
-	headerTitle: 'Node/Express를 활용한 게시판' 
+	headerTitle: 'Node/Express를 활용한 게시판'
 }
 
 router.get('/download/:id', async (req, res, next) => {
@@ -79,8 +79,8 @@ router.get(['/', '/list'], async (req, res, next) => { // /:page(params) : 주�
 });
 
 router.get('/create', (req, res, next) => {
-	const pug = { ...pugs, tinyKey: process.env.TINY_KEY }
-	res.render('board/create', pug);
+		const pug = { ...pugs, tinyKey: process.env.TINY_KEY }
+		res.render('board/create', pug);
 });
 
 router.post('/save', upload.single('upfile'), async (req, res, next) => { //upfile:필드명(input name)

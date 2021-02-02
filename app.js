@@ -4,7 +4,7 @@ const express = require('express')
 const app = express();
 const path = require('path')
 const { err } = require('./modules/util')
-const session = require('./modules/sessions')
+const sessions = require('./modules/sessions')
 const locals = require('./modules/locals')
 
 /*********** Server ***********/
@@ -25,7 +25,7 @@ app.use(express.urlencoded({extended: false}))
 //body를 parsing, 미들웨어(use)
 
 /*********** Session ***********/
-app.use(session());
+app.use(sessions());
 /* 
 app.set('trust proxy', 1)
 app.use(session({  //use : 미들웨어
