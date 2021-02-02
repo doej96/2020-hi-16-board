@@ -39,4 +39,3 @@ const srcPath = (filename) => {
 }
 
 module.exports = { err, alert, extName, srcPath }
-//...

@@ -5,7 +5,7 @@ const app = express();
 const path = require('path')
 const { err } = require('./modules/util')
 const sessions = require('./modules/sessions')
-const locals = require('./modules/locals')
+const local = require('./modules/local')
 
 /*********** Server ***********/
 app.listen(process.env.PORT, () => {
@@ -36,7 +36,7 @@ app.use(session({  //use : 미들웨어
 }))
  */
 
-app.use(locals());
+app.use(local());
 
 /*********** Router ***********/
 const authRouter = require('./routes/auth-route')
