@@ -9,7 +9,7 @@ const pugs = {
   css: 'auth', 
 	js: 'auth', 
 	title: 'Express Board', 
-	headerTitle: 'Node/Express를 활용한 인증 구현' 
+	headerTitle: 'Node/Express를 활용한 인증 구현'
 }
 
 router.get('/logout', isUser, (req, res, next) => {
