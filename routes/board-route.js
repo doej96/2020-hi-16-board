@@ -5,6 +5,7 @@ const { upload, imgExt } = require('../modules/multers');
 const { pool } = require('../modules/mysql-pool');
 const { err, alert, extName, srcPath } = require('../modules/util');
 const pagers = require('../modules/pagers')
+const { isUser, isGuest } = require('../modules/auth')
 const router = express.Router();
 const pugs = {
 	css: 'board', 
@@ -78,12 +79,12 @@ router.get(['/', '/list'], async (req, res, next) => { // /:page(params) : 주�
 	}
 });
 
-router.get('/create', (req, res, next) => {
+router.get('/create', isUser, (req, res, next) => {
 		const pug = { ...pugs, tinyKey: process.env.TINY_KEY }
 		res.render('board/create', pug);
 });
 
-router.post('/save', upload.single('upfile'), async (req, res, next) => { //upfile:필드명(input name)
+router.post('/save', isUser, upload.single('upfile'), async (req, res, next) => { //upfile:필드명(input name)
   //console.log(req.file)
 	try {
 		const { title, content, writer } = req.body;
