@@ -4,6 +4,7 @@ const express = require('express')
 const app = express();
 const path = require('path')
 const { err } = require('./modules/util')
+const session = require('express-session')
 
 /*********** Server ***********/
 app.listen(process.env.PORT, () => {
@@ -21,6 +22,22 @@ app.locals.pretty = true;
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 //body를 parsing, 미들웨어(use)
+
+/*********** Session ***********/
+app.set('trust proxy', 1)
+app.use(session({  //use : 미들웨어
+  secret: process.env.SESSION_KEY,  //salt
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }  //http이기 때문에 false, https면 true
+}))
+
+app.use((req, res, next) => {
+  app.locals.user = req.session.user || {}
+  //login되야만 user정보가 담김, 아니면 빈 객체
+  //pug(view engine이 쓰는 전역변수)
+  next();
+})
 
 /*********** Router ***********/
 const authRouter = require('./routes/auth-route')

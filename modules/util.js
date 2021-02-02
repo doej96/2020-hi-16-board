@@ -36,4 +36,4 @@ const srcPath = (filename) => {
   return `/uploads/${filename.substr(0, 9)}/${filename}`;
 }
 
-module.exports = { err, alert, extName }
+module.exports = { err, alert, extName, srcPath }

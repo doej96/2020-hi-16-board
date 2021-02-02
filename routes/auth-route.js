@@ -10,6 +10,12 @@ const pugs = {
 	title: 'Express Board', 
 	headerTitle: 'Node/Express를 활용한 인증 구현' 
 }
+
+router.get('/logout', (req, res, next) => {
+  req.session.destroy();
+  req.app.locals = {}; //안에 있던 user정보 없어짐, pug에 받는 정보
+  res.redirect('/')
+})
 /* 
 router.get('/login', async (req, res, next) => {
   let sql, value, r, rs, compare;
@@ -56,12 +62,21 @@ router.post('/logon', async (req, res, next) => {
   let Msg = '아이디 혹은 패스워드를 확인하세요.';
   let sql, value, r, rs;
   let { userid, userpw } = req.body;
-  sql = 'SELECT userpw FROM auth WHERE userid=?';
+  sql = 'SELECT * FROM auth WHERE userid=?';
   value = [userid];
   r = await pool.query(sql, value);
   if(r[0].length == 1) { //비밀번호 있어야 r[0] 존재
     compare = await bcrypt.compare(userpw + process.env.BCRYPT_SALT, r[0][0].userpw);
-    if(compare) res.send('로그인됨');
+    if(compare) {
+      rs = r[0][0];
+      req.session.user = {
+        id: rs.id,
+        userid: rs.userid,
+        username: rs.username,
+        email: rs.email
+      }
+      res.redirect('/')
+    }
     else res.send(alert(Msg))
   }
   else{

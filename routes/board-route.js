@@ -6,7 +6,7 @@ const { pool } = require('../modules/mysql-pool');
 const { err, alert, extName, srcPath } = require('../modules/util');
 const pagers = require('../modules/pagers')
 const router = express.Router();
-const pugs = { 
+const pugs = {
 	css: 'board', 
 	js: 'board', 
 	title: 'Express Board', 
@@ -70,6 +70,7 @@ router.get(['/', '/list'], async (req, res, next) => { // /:page(params) : ì£¼ì†
 			else v.icon = '/img/empty.png';
 			return v;
 		});
+		console.log(req.session);
 		res.render('board/list', { ...pugs, rs, pager });
 	}
 	catch(e) {
