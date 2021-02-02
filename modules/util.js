@@ -1,3 +1,5 @@
+const path = require('path')
+
 const err = (code, msg) => {
   if(code == 404) {
     return {
@@ -29,7 +31,7 @@ const alert = (msg) => {
 }
 
 const extName =(filename) => {
-  return path.extname(rs.oriname).substr(1).toLowerCase();
+  return path.extname(filename).substr(1).toLowerCase();
 }
 
 const srcPath = (filename) => {
