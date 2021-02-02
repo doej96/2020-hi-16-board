@@ -4,7 +4,8 @@ const express = require('express')
 const app = express();
 const path = require('path')
 const { err } = require('./modules/util')
-const session = require('express-session')
+const session = require('./modules/sessions')
+const locals = require('./modules/locals')
 
 /*********** Server ***********/
 app.listen(process.env.PORT, () => {
@@ -24,6 +25,8 @@ app.use(express.urlencoded({extended: false}))
 //body를 parsing, 미들웨어(use)
 
 /*********** Session ***********/
+app.use(session());
+/* 
 app.set('trust proxy', 1)
 app.use(session({  //use : 미들웨어
   secret: process.env.SESSION_KEY,  //salt
@@ -31,13 +34,9 @@ app.use(session({  //use : 미들웨어
   saveUninitialized: true,
   cookie: { secure: false }  //http이기 때문에 false, https면 true
 }))
+ */
 
-app.use((req, res, next) => {
-  app.locals.user = req.session.user || {}
-  //login되야만 user정보가 담김, 아니면 빈 객체
-  //pug(view engine이 쓰는 전역변수)
-  next();
-})
+app.use(locals());
 
 /*********** Router ***********/
 const authRouter = require('./routes/auth-route')

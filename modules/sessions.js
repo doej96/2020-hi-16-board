@@ -1,0 +1,21 @@
+const session = require('express-session')
+const MySQLStore = require('express-mysql-session')(session);
+
+const option = {
+  host: process.env.DB_HOST,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASS,
+	database: process.env.DB_DATABASE
+}
+
+module.exports = () => {
+  return session({
+  secret: process.env.SESSION_KEY,  //salt
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false },
+  store: new MySQLStore(option)
+  })
+}
+
+//app.use(session({}))
