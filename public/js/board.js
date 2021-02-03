@@ -1,10 +1,10 @@
 function onModal(src) {
-	$(".modal-wrapper").addClass('active')
-	$(".modal-wrapper .modal-img").attr('src', src)
+	$(".modal-wrapper").addClass('active');
+	$(".modal-wrapper .modal-img").attr('src', src);
 }
 
 function onModalClose() {
-	$(".modal-wrapper")
+	$(".modal-wrapper").removeClass('active');
 }
 
 function onSave(f) {
@@ -21,9 +21,14 @@ function onMobile() {
 }
 
 function onResize(e) {
-	if ($(this).width() > 767) {
+	if($(this).width() > 767) {
 		$('.mobile-sub').stop().slideUp(0);
 	}
 }
-
 $(window).resize(onResize);
+
+function onRev(id) {
+	if(confirm("정말로 삭제하시겠습니까?")) {
+		location.href = '/board/remove/'+id;
+	}
+}

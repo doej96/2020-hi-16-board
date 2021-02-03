@@ -35,7 +35,6 @@ app.use(session({  //use : 미들웨어
   cookie: { secure: false }  //http이기 때문에 false, https면 true
 }))
  */
-
 app.use(local());
 
 /*********** Router ***********/

@@ -1,9 +1,10 @@
 const express = require('express');
 const moment = require('moment')
 const path = require('path')
+const fs = require('fs-extra')
 const { upload, imgExt } = require('../modules/multers');
 const { pool } = require('../modules/mysql-pool');
-const { err, alert, extName, srcPath } = require('../modules/util');
+const { err, alert, extName, srcPath, realPath } = require('../modules/util');
 const pagers = require('../modules/pagers')
 const { isUser, isGuest } = require('../modules/auth')
 const router = express.Router();
@@ -51,6 +52,7 @@ router.get('/view/:id', async (req, res, next) => { //param으로 보냄 /view/:
 	
 
 router.get(['/', '/list'], async (req, res, next) => { // /:page(params) : 주소줄에 board/1 -> 1페이지
+	console.log(req.app.locals.user)
 	try {
 		let sql, value, r, rs, pager;
     sql = 'SELECT count(*) FROM board';
@@ -88,8 +90,8 @@ router.post('/save', isUser, upload.single('upfile'), async (req, res, next) => 
   //console.log(req.file)
 	try {
 		const { title, content, writer } = req.body;
-		let sql = 'INSERT INTO board SET title=?, content=?, writer=?'; //sql을 const로 만들면 += 안됨
-		const value = [title, content, writer];
+		let sql = 'INSERT INTO board SET title=?, content=?, writer=?, uid=?'; //sql을 const로 만들면 += 안됨
+		const value = [title, content, writer, req.session.user.id];
 		if(req.banExt) {
       //history.go(-1)
       res.send(alert(`${req.banExt} 파일은 업로드 할 수 없습니다.`));
@@ -108,5 +110,24 @@ router.post('/save', isUser, upload.single('upfile'), async (req, res, next) => 
 		next(err(e.message));
 	}
 });
+
+router.get('/remove/:id', isUser, async (req, res, next) => {
+	try {
+		let sql, value, r, rs;
+		sql = 'SELECT savefile FROM board WHERE id=? AND uid=?' //AND uid=? 회원 아이디로 들어온 것인지 다시 확인
+		value = [req.params.id, req.session.user.id]
+		r = await pool.query(sql, value)
+		rs = r[0][0]
+		if(rs.savefile) {
+			await fs.remove(realPath(rs.savefile));
+		}
+		sql = 'DELETE FROM board WHERE id=? AND uid=?'
+		r = await pool.query(sql, value)
+		res.redirect('/board')
+	}
+	catch {
+		next(err(e.message))
+	}
+})
 
 module.exports = router;
