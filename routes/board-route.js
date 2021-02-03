@@ -2,6 +2,7 @@ const express = require('express');
 const moment = require('moment')
 const path = require('path')
 const fs = require('fs-extra')
+const ip = require('request-ip')
 const { upload, imgExt } = require('../modules/multers');
 const { pool } = require('../modules/mysql-pool');
 const { err, alert, extName, srcPath, realPath } = require('../modules/util');
@@ -44,7 +45,9 @@ router.get('/view/:id', async (req, res, next) => { //param으로 보냄 /view/:
 			rs.src = imgExt.includes(extName(rs.savefile)) ? srcPath(rs.savefile) : null;
 			//res.json(r[0][0]);
 		}
-	res.render('board/view', {...pugs, rs })
+		sql = 'SELECT id FROM board-ip WHERE bid=? AND ip=?';
+		
+		res.render('board/view', {...pugs, rs })
 	}
 	catch(e) {
 		next(err(e.message))
