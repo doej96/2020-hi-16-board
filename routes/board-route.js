@@ -50,6 +50,9 @@ router.get('/view/:id', async (req, res, next) => { //param으로 보냄 /view/:
 		r = await pool.query(sql, value)
 		if (r[0].length == 0) { //못 찾았으면
 			sql = 'UPDATE board SET readnum = readnum + 1 WHERE id='+rs.id;
+			await pool.query(sql)
+			sql = 'INSERT INTO board-ip SET bid=?, ip=?'
+			await pool.query(sql, value)
 		}
 		res.render('board/view', {...pugs, rs })
 	}
