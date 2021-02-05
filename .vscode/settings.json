@@ -2,5 +2,6 @@
   "editor.fontSize": 21,
   "compile-hero.disable-compile-files-on-did-save-code": false,
   "editor.fontFamily": "D2Coding",
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "editor.insertSpaces": false
 }
