@@ -6,6 +6,7 @@ const path = require('path')
 const { err } = require('./modules/util')
 const sessions = require('./modules/sessions')
 const local = require('./modules/local')
+const logger = require('./modules/logger')
 
 /*********** Server ***********/
 app.listen(process.env.PORT, () => {
@@ -25,6 +26,7 @@ app.use(express.urlencoded({extended: false}))
 //body를 parsing, 미들웨어(use)
 
 /*********** Session ***********/
+//app.use(logger())
 app.use(sessions());
 /* 
 app.set('trust proxy', 1)
@@ -43,10 +45,12 @@ const boardRouter = require('./routes/board-route')
 const apiRouter = require('./routes/api-route')
 const galleryRouter = require('./routes/gallery-route')
 
+app.use(logger('common'))
 app.use('/', express.static(path.join(__dirname, 'public')))
 app.use('/storages', express.static(path.join(__dirname, 'uploads')))
 //브라우저의 root는 public이기 때문에 root(public)밖에 있는 uploads 불러서 사진 띄우려면 static으로 불러야함
 //해킹방지 위해 이름 다르게 설정, storages라고 치면 uploads폴더 뜸
+app.use(logger('combined'))
 app.use('/auth', authRouter)
 app.use('/board', boardRouter)
 app.use('/api', apiRouter)
@@ -61,5 +65,3 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   res.render('error', err) //err:전달받은 err객체
 })
-
-

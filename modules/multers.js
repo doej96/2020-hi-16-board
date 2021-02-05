@@ -33,8 +33,7 @@ const fileFilter = (req, file, cb) => {
   else {
     req.banExt = ext;
     cb(null, false);
-  }
-  
+  }  
   // 이 함수는 boolean 값과 함께 `cb`를 호출함으로써 해당 파일을 업로드 할지 여부를 나타낼 수 있습니다.
   // 이 파일을 거부하려면 다음과 같이 `false` 를 전달합니다:
   //cb(null, false)
@@ -45,6 +44,19 @@ const fileFilter = (req, file, cb) => {
   // 무언가 문제가 생겼다면 언제나 에러를 전달할 수 있습니다:
   //cb(new Error('I don\'t have a clue!'))
 }
-const upload = multer({ storage, limits, fileFilter })
 
-module.exports = { upload, imgExt, allowExt }
+const imgFilter = (req, file, cb) => {
+  var ext = path.extname(file.originalname).substr(1).toLowerCase();
+  if(imgExt.includes(ext)) {
+    cb(null, true);
+  }
+  else {
+    req.banExt = ext;
+    cb(null, false);
+  }
+}
+
+const upload = multer({ storage, limits, fileFilter })
+const uploadImg = multer({ storage, limits, fileFilter: imgFilter });
+
+module.exports = { upload, uploadImg, imgExt, allowExt }
