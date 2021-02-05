@@ -11,7 +11,7 @@ const { isUser, isGuest } = require('../modules/auth')
 const router = express.Router();
 const pugs = {
 	css: 'board', 
-	js: 'board', 
+	js: 'board',
 	title: 'Express Board',
 	tinyKey: process.env.TINY_KEY,
 	headerTitle: 'Node/Express를 활용한 게시판'
