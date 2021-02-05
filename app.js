@@ -26,7 +26,7 @@ app.use(express.urlencoded({extended: false}))
 //body를 parsing, 미들웨어(use)
 
 /*********** Session ***********/
-app.use(logger())
+//app.use(logger())
 app.use(sessions());
 /* 
 app.set('trust proxy', 1)
@@ -65,5 +65,3 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   res.render('error', err) //err:전달받은 err객체
 })
-
-
