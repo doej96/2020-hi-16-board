@@ -3,7 +3,7 @@ const moment = require('moment');
 const path = require('path');
 const fs = require('fs-extra');
 const ip = require('request-ip');
-const { upload, imgExt } = require('../modules/multers');
+const { uploadImg, imgExt } = require('../modules/multers');
 const { pool, sqlGen: sql } = require('../modules/mysql-pool');
 const { err, alert, extName, srcPath, realPath } = require('../modules/util');
 const pagers = require('../modules/pagers');
@@ -20,6 +20,10 @@ const pugs = {
 router.get('/create', isUser, (req, res, next) => {
   res.render('gallery/create', pugs);
 })
+
+router.post('/save', isUser, uploadImg.array('upfile', 10), async (req, res, next) => {
+	res.json(req.files);
+});
 
 
 module.exports = router;
