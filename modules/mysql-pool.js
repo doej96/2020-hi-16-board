@@ -53,10 +53,20 @@ where : {
 /******* router 실행 ********/
 // await sqlGen('board', ['I', 'U', 'D', 'S'], {});
 
-const sqlGen = async (next, table, mode, opt={}) => {
+const sqlFn = async (table, mode, opt, req, res, next) => {
 	try {
-		let {	field=[], data={}, file, where, order, limit } = opt;
-		let sql, value=[], r, tmp;
+		let {	
+			field = [], 
+			data = {}, 
+			file = (req ? req.file : null), 
+			files = (req ? req.files : null),
+			fileTable, 
+			where, 
+			order,
+			limit } = opt;
+		let sql, value=[], r, fid, tmp;
+
+		data = { ...data, ...(req && req.body ? req.body : {}) };
 	
 		mode = mode.toUpperCase();
 		if(mode == 'I') {
@@ -73,6 +83,7 @@ const sqlGen = async (next, table, mode, opt={}) => {
 		}
 	
 		tmp = Object.entries(data).filter( v => field.includes(v[0]));
+
 		if(file) tmp.push(['savefile', file.filename],['orifile', file.originalname]);
 		
 		for(let v of tmp) {
@@ -90,6 +101,7 @@ const sqlGen = async (next, table, mode, opt={}) => {
 			for(let i in field) {
 				sql += (i == 0) ? ' WHERE ' : ' ' + op + ' ';
 				sql += ` ${field[i][0]} ${field[i][2] || '='} '${field[i][2] == 'LIKE'? '%' : ''}${field[i][1]}${field[i][2] == 'LIKE' ? '%' : ''}' `;
+				if(field[i][0] === 'id') fid = field[i][1];
 			}
 		}
 		if((mode == 'U' || mode == 'D') && !sql.includes('WHERE')) {
@@ -112,6 +124,28 @@ const sqlGen = async (next, table, mode, opt={}) => {
 		console.log(sql);
 		console.log(value);
 		r = await pool.query(sql, value);
+
+		if(files) {
+			// upload.array();
+			if(mode=='I' && r[0].insertId) {
+				fid = r[0].insertId;
+				for(let v of req.files) {
+					let sql = `INSERT INTO ${fileTable} SET savefile=?, orifile=?, fid=?`;
+					let value = [v.filename, v.originalname, fid];
+					await pool.query(sql, value);
+				}
+			}
+			if(mode == 'U') {
+
+			}
+			if(mode == 'D') {
+
+			}
+			if(mode == 'S') {
+
+			}
+		}
+
 		return r[0];
 	}
 	catch(e) {
@@ -119,5 +153,16 @@ const sqlGen = async (next, table, mode, opt={}) => {
 	}
 }
 
+const sqlGen = async (next, table, mode, opt={}) => {
+	return await sqlFn(table, mode, opt, null, null, next);
+}
 
-module.exports = { mysql, pool, sqlGen };
+const sqlMiddle = async (table, mode, opt={}) => {
+	return async (req, res, next) => {
+		const rs = await sqlFn(table, mode, opt, req, res, next);
+		req.rs = rs;
+	}
+}
+
+
+module.exports = { mysql, pool, sqlGen, sqlMiddle };
