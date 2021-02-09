@@ -1,5 +1,48 @@
 .list-wrapper .grid-item {
   border: 1px solid #eaeaea;
+  border-radius: 4px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.list-wrapper .grid-item .grid-inside {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.list-wrapper .grid-item .grid-inside img {
+  transition: all 0.5s;
+}
+
+.list-wrapper .grid-item .grid-info {
+  padding: 1em;
+  color: #eaeaea;
+  background-color: rgba(0, 4, 14, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateY(3.5em);
+  transition: all 0.35s;
+  transition-delay: 0.25s;
+}
+
+.list-wrapper .grid-item .grid-info .fa {
+  margin: 0 .5em;
+}
+
+.list-wrapper .grid-item:hover .grid-info {
+  transform: translateX(0);
+}
+
+.list-wrapper .grid-item:hover img.ani {
+  transform: translateX(-100%);
 }
 
 .list-wrapper .grid-item,
@@ -43,6 +86,41 @@
     padding: 2%;
     margin: 2%;
   }
+}
+
+.modal-wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  background-color: rgba(0, 4, 14, 0.9);
+  transition: all 0.35s;
+  opacity: 0;
+}
+
+.modal-wrapper.active {
+  opacity: 1;
+}
+
+.modal-wrapper .bt-close {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: auto;
+  left: auto;
+  color: #eaeaea;
+  background-color: #e6614f;
+  text-align: center;
+  line-height: 40px;
+  font-size: 1.25em;
+  cursor: pointer;
 }
 
 .create-wrapper .list-wrapper {

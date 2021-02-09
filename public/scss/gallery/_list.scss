@@ -1,6 +1,38 @@
 .list-wrapper {
 	.grid-item {
 		border: 1px solid $colorLighter;
+		border-radius: 4px;
+		cursor: pointer;
+		overflow: hidden;
+		.grid-inside {
+			@include flex($FS, $FS);
+			overflow: hidden;
+			img {
+				transition: all 0.5s;
+			}
+		}
+		.grid-info {
+			padding: 1em;
+			color: $colorLighter;
+			background-color: rgba(0,4,14,0.9);
+			@include flex($CT, $CT);
+			@include layer(absolute, auto, 0, 0, 0);
+			// absolute주면 사이즈 줄어드는데 left 0, right 0 주면 양쪽 끝으로 늘어남
+			.fa {margin: 0 .5em;}
+			transform: translateY(3.5em);
+			transition: all 0.35s;
+			transition-delay: 0.25s;
+		}
+		&:hover {
+			.grid-info {
+				transform: translateX(0);
+			}
+			img {
+				&.ani {
+					transform: translateX(-100%);
+				}
+			}
+		}
 	}
 	.grid-item,
 	.grid-sizer {
@@ -27,5 +59,28 @@
 			padding: 2%;
 			margin: 2%;
 		}
+	}
+}
+
+.modal-wrapper {
+	@include layer(fixed, 0,0,0,0);
+	@include flex($CT, $CT);
+	z-index: 999;
+	background-color: rgba(0,4,14,0.9);
+	transition: all 0.35s;
+	opacity: 0;
+	&.active {
+		opacity: 1;
+	}
+	.bt-close {
+		width: 40px;
+		height: 40px;
+		@include layer(absolute, 0, 0, auto, auto);
+		color: $colorLighter;
+		background-color: $colorRed;
+		text-align: center;
+		line-height: 40px;
+		font-size: $xl;
+		cursor: pointer;
 	}
 }

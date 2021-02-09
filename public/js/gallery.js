@@ -1,4 +1,4 @@
-function onPlus() {
+function onPlus(el) {
 	if($(".file-wrapper .file-wrap").length < 9) {
 		var html = ``;
 		html += '<div class="list-wrap file-wrap">';
@@ -54,4 +54,30 @@ function onImagesLoaded() {
 		columnWidth: '.grid-sizer',
 		percentPosition: true
 	});
+}
+
+function onInfo(el, e, id) {
+	e.stopPropagation();
+	$(".modal-wrapper").css('display', 'flex');
+	$(".modal-wrapper").css('opacity'); //opacity 다시 읽어줌
+	$(".modal-wrapper").addClass('active')
+}
+
+function onDelete(el, e, id) {
+	e.stopPropagation();
+	if(confirm('정말 삭제하시겠습니까?')) {
+		location.href= '/gallery/delete/'+id;
+	}
+}
+
+function onEdit(el, e, id) {
+	e.stopPropagation();
+	location.href= '/gallery/change/'+id
+}
+
+function onInfoClose() {
+	$(".modal-wrapper").removeClass('active')
+	setTimeout(function(){
+		$(".modal-wrapper").css('display', 'none');
+	},350)
 }
