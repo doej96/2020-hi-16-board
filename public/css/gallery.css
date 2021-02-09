@@ -97,6 +97,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
   z-index: 999;
   background-color: rgba(0, 4, 14, 0.9);
   transition: all 0.35s;
@@ -107,7 +108,7 @@
   opacity: 1;
 }
 
-.modal-wrapper .bt-close {
+.modal-wrapper .bt-red {
   width: 40px;
   height: 40px;
   position: absolute;
@@ -121,6 +122,98 @@
   line-height: 40px;
   font-size: 1.25em;
   cursor: pointer;
+}
+
+.modal-wrapper .info-wrapper {
+  transition: all 0.35s;
+  transform: translateX(calc(-100% - 30px));
+  background-color: #fff;
+  width: 30%;
+  height: 100vh;
+  overflow-y: auto;
+  min-width: 300px;
+  padding: 0 1.5em;
+  z-index: 9999;
+  position: absolute;
+  top: 0;
+  right: auto;
+  bottom: 0;
+  left: 0;
+  box-shadow: 12px, 0, 12px rgba(0, 0, 0, 0.5);
+}
+
+.modal-wrapper .info-wrapper.active {
+  transform: translateX(0);
+}
+
+.modal-wrapper .info-wrapper .lists {
+  margin-top: 80px;
+}
+
+.modal-wrapper .info-wrapper .lists .list {
+  margin-bottom: 1.5em;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.modal-wrapper .info-wrapper .lists .list .title {
+  font-size: 1.25em;
+  color: #555;
+  padding-left: .5em;
+  border-left: 3px solid #2d7218;
+}
+
+.modal-wrapper .info-wrapper .lists .list .content {
+  font-size: 1.125em;
+  color: #999;
+  padding: 1em 0 1em;
+}
+
+.modal-wrapper .modal-wrap {
+  width: auto;
+  max-width: 70%;
+}
+
+.modal-wrapper .modal-wrap .swiper-container {
+  padding-bottom: 7em;
+}
+
+.modal-wrapper .modal-wrap .swiper-container .swiper-wrapper .swiper-slide {
+  text-align: center;
+}
+
+.modal-wrapper .modal-wrap .swiper-container .bts {
+  position: absolute;
+  top: auto;
+  right: 0;
+  bottom: 4em;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #bbb;
+  font-size: 1.25em;
+}
+
+.modal-wrapper .modal-wrap .swiper-container .bts .fa {
+  margin: 0 0.25em;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.modal-wrapper .modal-wrap .swiper-container .bts .fa:hover {
+  color: #fc8739;
+}
+
+.modal-wrapper .modal-wrap .swiper-container .swiper-pagination .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  opacity: .3;
+}
+
+.modal-wrapper .modal-wrap .swiper-container .swiper-pagination .swiper-pagination-bullet-active {
+  opacity: 1;
+  background: #e6614f;
 }
 
 .create-wrapper .list-wrapper {
