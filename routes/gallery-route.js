@@ -83,5 +83,19 @@ router.get('/api/view/:id', async (req, res, next) => {
 	}
 })
 
+router.get('/download', async (req, res, next) => {
+	try {
+		let sql, value, savefile, orifile, r, rs;
+		savefile = req.query.file.split('/').pop();
+		sql = 'SELECT orifile FROM gallery_file WHERE savefile=?'
+		value = [savefile];
+		r = await pool.query(sql, value)
+		orifile = r[0][0].orifile
+		res.download(realPath(savefile), orifile);
+	}
+	catch(e) {
+		next(err(e.message || e))
+	}
+})
 
 module.exports = router;
