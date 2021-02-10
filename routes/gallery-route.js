@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const ip = require('request-ip');
 const { uploadImg, imgExt } = require('../modules/multers');
 const { pool, sqlMiddle: sql } = require('../modules/mysql-pool');
-const { err, alert, extName, srcPath, realPath } = require('../modules/util');
+const { err, alert, extName, srcPath, realPath, datetime } = require('../modules/util');
 const pagers = require('../modules/pagers');
 const { isUser, isGuest } = require('../modules/auth');
 const router = express.Router();
@@ -41,7 +41,7 @@ router.get(['/', '/list'], async (req, res, next) => {
 			v.src[1] = srcPath(r2[0][1].savefile);
 		}
 	}
-	console.log(pager);
+	// console.log(pager);
 	res.render('gallery/list', { ...pugs, rs, pager });
 });
 
@@ -53,7 +53,7 @@ router.get('/create', isUser, (req, res, next) => {
 router.post('/save', isUser, uploadImg.array('upfile', 10), async (req, res, next) => {
 	let sql, value, rs, r, fid;
 	sql = `INSERT INTO gallery SET title=?, content=?, writer=?, uid=?`;
-	value = [req.body.title, req.body.writer, req.body.content, req.session.user.id];
+	value = [req.body.title, req.body.content, req.body.writer, req.session.user.id];
 	rs = await pool.query(sql, value);
 	fid = rs[0].insertId;
 	if(req.files) {
@@ -65,6 +65,23 @@ router.post('/save', isUser, uploadImg.array('upfile', 10), async (req, res, nex
 	}
 	res.redirect('/gallery');
 });
+
+router.get('/api/view/:id', async (req, res, next) => {
+	try {
+		let sql, value, rs, r, r2, src=[];
+		sql = 'SELECT * FROM gallery WHERE id='+req.params.id;
+		r = await pool.query(sql);
+		rs = r[0][0];
+		rs.created = datetime(rs.created, 2);
+		sql = 'SELECT * FROM gallery_file WHERE fid='+req.params.id;
+		r2 = await pool.query(sql);
+		rs.src = r2[0].map(v => srcPath(v.savefile))
+		res.json(rs);
+	}
+	catch(e) {
+		next(err(e.message || e))
+	}
+})
 
 
 module.exports = router;

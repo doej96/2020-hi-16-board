@@ -18,16 +18,16 @@
 
 .list-wrapper .grid-item .grid-info {
   padding: 1em;
+  background-color: rgba(0, 4, 14, 0.8);
   color: #eaeaea;
-  background-color: rgba(0, 4, 14, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: absolute;
   top: auto;
   right: 0;
   bottom: 0;
   left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   transform: translateY(3.5em);
   transition: all 0.35s;
   transition-delay: 0.25s;
@@ -38,7 +38,7 @@
 }
 
 .list-wrapper .grid-item:hover .grid-info {
-  transform: translateX(0);
+  transform: translateY(0);
 }
 
 .list-wrapper .grid-item:hover img.ani {
@@ -98,8 +98,8 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  z-index: 999;
-  background-color: rgba(0, 4, 14, 0.9);
+  z-index: 9999;
+  background-color: rgba(0, 4, 14, 0.8);
   transition: all 0.35s;
   opacity: 0;
 }
@@ -108,20 +108,30 @@
   opacity: 1;
 }
 
+.modal-wrapper .loader {
+  z-index: 9;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #eaeaea;
+  font-size: 3em;
+}
+
 .modal-wrapper .bt-red {
   width: 40px;
   height: 40px;
+  background-color: #e6614f;
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+  font-size: 1.125em;
+  cursor: pointer;
   position: absolute;
   top: 0;
   right: 0;
   bottom: auto;
   left: auto;
-  color: #eaeaea;
-  background-color: #e6614f;
-  text-align: center;
-  line-height: 40px;
-  font-size: 1.25em;
-  cursor: pointer;
 }
 
 .modal-wrapper .info-wrapper {
@@ -132,14 +142,14 @@
   height: 100vh;
   overflow-y: auto;
   min-width: 300px;
-  padding: 0 1.5em;
-  z-index: 9999;
   position: absolute;
   top: 0;
   right: auto;
   bottom: 0;
   left: 0;
   box-shadow: 12px, 0, 12px rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  padding: 0 1.5em;
 }
 
 .modal-wrapper .info-wrapper.active {
@@ -158,35 +168,41 @@
 .modal-wrapper .info-wrapper .lists .list .title {
   font-size: 1.25em;
   color: #555;
-  padding-left: .5em;
+  padding-left: 0.5em;
   border-left: 3px solid #2d7218;
 }
 
 .modal-wrapper .info-wrapper .lists .list .content {
   font-size: 1.125em;
   color: #999;
-  padding: 1em 0 1em;
+  padding: 1em 0 1em 1em;
 }
 
 .modal-wrapper .modal-wrap {
+  opacity: 0;
+  transition: all 0.35s;
   width: auto;
   max-width: 70%;
 }
 
+.modal-wrapper .modal-wrap.active {
+  opacity: 1;
+}
+
 .modal-wrapper .modal-wrap .swiper-container {
-  padding-bottom: 7em;
+  padding-bottom: 1em;
 }
 
 .modal-wrapper .modal-wrap .swiper-container .swiper-wrapper .swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
+  height: 60vh;
+  overflow: hidden;
 }
 
-.modal-wrapper .modal-wrap .swiper-container .bts {
-  position: absolute;
-  top: auto;
-  right: 0;
-  bottom: 4em;
-  left: 0;
+.modal-wrapper .modal-wrap .bts {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -194,24 +210,31 @@
   font-size: 1.25em;
 }
 
-.modal-wrapper .modal-wrap .swiper-container .bts .fa {
+.modal-wrapper .modal-wrap .bts .fa {
   margin: 0 0.25em;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: color 0.3s;
 }
 
-.modal-wrapper .modal-wrap .swiper-container .bts .fa:hover {
+.modal-wrapper .modal-wrap .bts .fa:hover {
   color: #fc8739;
 }
 
-.modal-wrapper .modal-wrap .swiper-container .swiper-pagination .swiper-pagination-bullet {
+.modal-wrapper .modal-wrap .swiper-pagination {
+  margin-top: 2em;
+  position: static;
+  text-align: center;
+}
+
+.modal-wrapper .modal-wrap .swiper-pagination .swiper-pagination-bullet {
   width: 12px;
   height: 12px;
   background: #fff;
   opacity: .3;
+  margin: 3px;
 }
 
-.modal-wrapper .modal-wrap .swiper-container .swiper-pagination .swiper-pagination-bullet-active {
+.modal-wrapper .modal-wrap .swiper-pagination .swiper-pagination-bullet-active {
   opacity: 1;
   background: #e6614f;
 }

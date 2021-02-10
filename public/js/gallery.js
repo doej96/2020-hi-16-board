@@ -49,29 +49,53 @@ function onSave(f) {
 	return true;
 }
 
-var $grid = $(".grid").imagesLoaded(onImagesLoaded);
-function onImagesLoaded() {
-	$grid.masonry({
-		itemSelector: '.grid-item',
-		columnWidth: '.grid-sizer',
-		percentPosition: true
-	});
-}
-
 function onModalShow(el, e, id) {
+	var html = '';
 	e.stopPropagation();
 	$(".modal-wrapper").css('display', 'flex');
 	$(".modal-wrapper").css('opacity'); //opacity 다시 읽어줌
 	$(".modal-wrapper").addClass('active')
-	if(!swiper) {
-		swiper = new Swiper('.swiper-container', {
-			loop: true,
-			pagination: {
-				el: '.swiper-pagination',
-				clickable: true
-			},
+	$('.modal-wrapper .loader').show();
+	$('.modal-wrapper .modal-wrap').removeClass('active');
+	$.get('/gallery/api/view/'+id, function(r){ //
+		for(var i in r.src) {
+			console.log(r);
+			html += '<div class="swiper-slide">'
+			html += '<img class="mw-100" src="'+r.src[i]+'" alt="image">'
+			html += '</div>'
+		}
+		$('.modal-wrapper .swiper-wrapper').html(html);
+		$('.modal-wrapper .info-wrapper .content').eq(0).html(r.title);
+		$('.modal-wrapper .info-wrapper .content').eq(1).html(r.writer);
+		$('.modal-wrapper .info-wrapper .content').eq(2).html(r.created);
+		$('.modal-wrapper .info-wrapper .content').eq(3).html(r.content);
+		if(r.src.length == 0) {
+			$('.modal-wrapper .fa-download').hide();
+			$('.modal-wrapper .fa-info-circle').css('font-size','3em');
+		}
+		else {
+			$('.modal-wrapper .fa-download').show();
+			$('.modal-wrapper .fa-info-circle').css('font-size','');
+		}
+		$('.modal-wrapper .swiper-wrapper').imagesLoaded(function(){
+			$('.modal-wrapper .loader').hide();
+			$('.modal-wrapper .modal-wrap').addClass('active');
+			if(swiper) swiper.destroy();
+				swiper = new Swiper('.swiper-container', {
+					spaceBetween: 10,
+					autoHeight: true,
+					loop: true,
+					pagination: {
+						el: '.swiper-pagination',
+						clickable: true
+					},
+				});
+				swiper.on('slideChange', function () {
+					console.log('slide changed');
+					console.log(swiper.realIndex);
+				});
 		});
-	}
+	})
 }
 
 function onDelete(el, e, id) {
@@ -101,3 +125,16 @@ function onInfoShow() {
 function onInfoHide() {
 	$(".info-wrapper").removeClass('active');
 }
+
+function init() {
+	var $grid = $(".grid").imagesLoaded(onImagesLoaded);
+	function onImagesLoaded() {
+		$grid.masonry({
+			itemSelector: '.grid-item',
+			columnWidth: '.grid-sizer',
+			percentPosition: true
+		});
+	}
+}
+
+init();

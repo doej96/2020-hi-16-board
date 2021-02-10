@@ -1,4 +1,23 @@
 const path = require('path');
+const moment = require('moment');
+
+/********* option *********/
+const datetime = (dt, opt=0) => {
+	switch(opt) {
+		case 1:
+			return moment(dt).format('YYYY-MM-DD');
+			break;
+		case 2:
+			return moment(dt).format('YYYY년 MM월 DD일 HH시 mm분 ss초');
+			break;
+		case 1:
+			return moment(dt).format('YYYY년 MM월 DD일');
+			break;
+		default:
+			return moment(dt).format('YYYY-MM-DD HH:mm:ss');
+			break;
+	}
+}
 
 const err = (code, msg) => {
 	if(code == 404) {
@@ -43,4 +62,4 @@ const realPath = (filename) => {
 	return path.join(__dirname, '../uploads', filename.substr(0, 9), filename);
 }
 
-module.exports = { err, alert, extName, srcPath, realPath }
+module.exports = { err, alert, extName, srcPath, realPath, datetime }
