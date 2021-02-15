@@ -17,6 +17,19 @@ const pugs = {
 	headerTitle: 'Node/Express를 활용한 갤러리' 
 }
 
+router.get('/api/remove/:id', isUser, async (req, res, next) => {
+	try {
+		let sql, rs, r, value;
+		sql = `SELECT gallery_file.* FROM gallery_file LEFT JOIN gallery ON gallery.id = gallery_file.fid WHERE gallery_file.id=? AND gallery.uid=?`;
+		value = [req.params.id, req.session.user.id];
+		r = await pool.query(sql, value);
+		res.json(r[0]);
+	}
+	catch(e) {
+		res.status(500).json(e);
+	}
+})
+
 router.get('/change/:id', isUser, async (req, res, next) => {
 	try {
 		let sql, value, rs, r;
@@ -27,10 +40,12 @@ router.get('/change/:id', isUser, async (req, res, next) => {
 		sql = 'SELECT * FROM gallery_file WHERE fid='+req.params.id;
 		r = await pool.query(sql)
 		rs.files = r[0];
-		res.json(rs);
+		for(let v of rs.files) v.src = srcPath(v.savefile);
+		rs.src
+		res.render('gallery/change', { ...pugs, rs })
 	}
 	catch(e) {
-
+		next(err(e.message || e))
 	}
 })
 
@@ -59,36 +74,35 @@ router.get('/delete/:id', isUser, async (req, res, next) => {
 
 router.get(['/', '/list'], async (req, res, next) => {
 	try {
-
-	}
-	catch {
-
-	}
-	let sql, value, r, r2, rs, pager;
-	sql = `SELECT count(id) FROM gallery`;
-	r = await pool.query(sql);
-	pager = pagers(req.query.page || 1, r[0][0]['count(id)']);
-	pager.router = 'gallery';
-	sql = `SELECT * FROM gallery LIMIT ${pager.startIdx}, ${pager.listCnt}`;
-	r = await pool.query(sql);
-	rs = r[0];
-	for(let v of rs) {
-		sql = `SELECT * FROM gallery_file WHERE fid=${v.id} ORDER BY id ASC LIMIT 0, 2`;
-		r2 = await pool.query(sql);
-		v.src = [];
-		if(r2[0].length == 0) {
-			v.src[0] = 'http://via.placeholder.com/300?text=No+Image';
+		let sql, value, r, r2, rs, pager;
+		sql = `SELECT count(id) FROM gallery`;
+		r = await pool.query(sql);
+		pager = pagers(req.query.page || 1, r[0][0]['count(id)']);
+		pager.router = 'gallery';
+		sql = `SELECT * FROM gallery LIMIT ${pager.startIdx}, ${pager.listCnt}`;
+		r = await pool.query(sql);
+		rs = r[0];
+		for(let v of rs) {
+			sql = `SELECT * FROM gallery_file WHERE fid=${v.id} ORDER BY id ASC LIMIT 0, 2`;
+			r2 = await pool.query(sql);
+			v.src = [];
+			if(r2[0].length == 0) {
+				v.src[0] = 'http://via.placeholder.com/300?text=No+Image';
+			}
+			else if(r2[0].length == 1) {
+				v.src[0] = srcPath(r2[0][0].savefile);
+			}
+			else {
+				v.src[0] = srcPath(r2[0][0].savefile);
+				v.src[1] = srcPath(r2[0][1].savefile);
+			}
 		}
-		else if(r2[0].length == 1) {
-			v.src[0] = srcPath(r2[0][0].savefile);
-		}
-		else {
-			v.src[0] = srcPath(r2[0][0].savefile);
-			v.src[1] = srcPath(r2[0][1].savefile);
-		}
+		// console.log(pager);
+		res.render('gallery/list', { ...pugs, rs, pager });
 	}
-	// console.log(pager);
-	res.render('gallery/list', { ...pugs, rs, pager });
+	catch(e) {
+		next(err(e.message));
+	}
 });
 
 
@@ -104,13 +118,13 @@ router.post('/save', isUser, uploadImg.array('upfile', 10), async (req, res, nex
 		rs = await pool.query(sql, value);
 		fid = rs[0].insertId;
 		if(req.files) {
-		for(let v of req.files) {
-			sql = `INSERT INTO gallery_file SET savefile=?, orifile=?, fid=?`;
-			value = [v.filename, v.originalname, fid];
-			await pool.query(sql, value);
+			for(let v of req.files) {
+				sql = `INSERT INTO gallery_file SET savefile=?, orifile=?, fid=?`;
+				value = [v.filename, v.originalname, fid];
+				await pool.query(sql, value);
 			}
-		res.redirect('/gallery');
 		}
+		res.redirect('/gallery');
 	}
 	catch {
 		next(err(e.message || e))
@@ -130,7 +144,7 @@ router.get('/api/view/:id', async (req, res, next) => {
 		res.json(rs);
 	}
 	catch(e) {
-		res.json(new Error(e.message || e))
+		res.json(e.message || e)
 	}
 })
 

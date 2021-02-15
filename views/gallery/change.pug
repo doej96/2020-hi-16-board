@@ -9,26 +9,29 @@ block content
 				li.list-wrap
 					.title 제목
 					.list
-						input.form-control(type="text" name="title" value=`${rs.title}` placeholder="제목")
+						input.form-control(type="text" name="title" placeholder="제목" value=`${rs.title}`)
 				li.list-wrap
 					.title 작성자
 					.list
-						input.form-control(type="text" name="writer" value=`${rs.writer}` placeholder="작성자")
-				li.list-wrap
-					.title 첨부이미지
-					.list
-						.file-wrap
-							if rs.savefile
+						input.form-control(type="text" name="writer" placeholder="작성자" value=`${rs.writer}`)
+				li.list-file-wrap
+					.bts.text-right.pt-3.pr-2(style=`${rs.files.length < 10 ? '' : 'display: none'}`)
+						a.bt-plus(href="javascript: onChgPlus();")
+							i.fa.fa-plus-circle.text-success
+					each v, i in rs.files
+						.list-wrap.file-wrapper 
+							.title 첨부이미지
+							.file-wrap
+								div
 								.legacy
-									if rs.src
-										img.thumb.mr-2(src=`${rs.src}` alt=`${rs.filename}`)
-									span= rs.filename
-									a.ml-2(href=`javascript: onApiRemove(${rs.id});`)
+									img.thumb.mr-2(src=`${v.src}` alt=`${v.orifile}`)
+									span= v.orifile
+									a.ml-2(href=`javascript: onApiRemove(${v.id});`)
 										i.fa.fa-times.text-danger.xl
-							.update
-								input.form-control-file(type="file" name="upfile")
-						.text-success.pt-3 * jpg png gif pdf zip ppt xls doc hwp txt만 업로드 가능합니다.
-				li.list-wrap
+								.list.pt-2.pb-3
+									input.form-control-file(type="file" name="upfile")
+				li.text-center.text-success.pb-3 * jpg png gif 파일이 업로드 가능합니다.
+				li.list-wrap.tiny-wrap
 					.w-100
 						textarea#content.form-control(name="content")= rs.content
 			.text-center.py-4
