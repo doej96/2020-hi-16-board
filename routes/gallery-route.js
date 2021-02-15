@@ -8,6 +8,7 @@ const { pool, sqlMiddle: sql } = require('../modules/mysql-pool');
 const { err, alert, extName, srcPath, realPath, datetime } = require('../modules/util');
 const pagers = require('../modules/pagers');
 const { isUser, isGuest } = require('../modules/auth');
+const { upperFirst } = require('lodash');
 const router = express.Router();
 const pugs = {
 	css: 'gallery', 
@@ -23,7 +24,13 @@ router.get('/api/remove/:id', isUser, async (req, res, next) => {
 		sql = `SELECT gallery_file.* FROM gallery_file LEFT JOIN gallery ON gallery.id = gallery_file.fid WHERE gallery_file.id=? AND gallery.uid=?`;
 		value = [req.params.id, req.session.user.id];
 		r = await pool.query(sql, value);
-		res.json(r[0]);
+		if(r[0].length == 1) {
+			await fs.remove(realPath(r[0][0].savefile));
+			sql = 'DELETE FROM gallery_file WHERE id='+req.params.id
+			r = await pool.query(sql)
+			res.json({code : 200})
+		}
+		else res.status(500).json({code: 500, error: '삭제에 실패했습니다.'})
 	}
 	catch(e) {
 		res.status(500).json(e);
