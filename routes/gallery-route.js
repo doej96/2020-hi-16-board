@@ -17,7 +17,53 @@ const pugs = {
 	headerTitle: 'Node/Express를 활용한 갤러리' 
 }
 
+router.get('/change/:id', isUser, async (req, res, next) => {
+	try {
+		let sql, value, rs, r;
+		// sql = `SELECT gallery.*, gallery_file.id AS file_id, gallery_file.savefile FROM gallery LEFT JOIN gallery_file ON gallery.id = gallery_file.fid WHERE gallery.id = ${req.params.id}`
+		sql = 'SELECT * FROM gallery WHERE id='+req.params.id;
+		r = await pool.query(sql)
+		rs = r[0][0];
+		sql = 'SELECT * FROM gallery_file WHERE fid='+req.params.id;
+		r = await pool.query(sql)
+		rs.files = r[0];
+		res.json(rs);
+	}
+	catch(e) {
+
+	}
+})
+
+router.get('/delete/:id', isUser, async (req, res, next) => {
+	try {
+		let sql, value, r, rs;
+		sql = 'SELECT savefile FROM gallery_file WHERE fid='+req.params.id;
+		r = await pool.query(sql)
+		for(let v of r[0]) {
+			await fs.remove(realPath(v.savefile))
+		}
+		sql = 'DELETE FROM gallery WHERE id=? AND uid=?'
+		value = [req.params.id, req.session.user.id]
+		r = await pool.query(sql, value)
+		if(r[0].affectedRows > 0) {
+			res.redirect('/gallery')
+		}
+		else {
+			res.send(alert('삭제에 실패하였습니다.'))
+		}
+	}
+	catch(e) {
+		next(err(e.message || e))
+	}
+})
+
 router.get(['/', '/list'], async (req, res, next) => {
+	try {
+
+	}
+	catch {
+
+	}
 	let sql, value, r, r2, rs, pager;
 	sql = `SELECT count(id) FROM gallery`;
 	r = await pool.query(sql);
@@ -51,19 +97,24 @@ router.get('/create', isUser, (req, res, next) => {
 });
 
 router.post('/save', isUser, uploadImg.array('upfile', 10), async (req, res, next) => {
-	let sql, value, rs, r, fid;
-	sql = `INSERT INTO gallery SET title=?, content=?, writer=?, uid=?`;
-	value = [req.body.title, req.body.content, req.body.writer, req.session.user.id];
-	rs = await pool.query(sql, value);
-	fid = rs[0].insertId;
-	if(req.files) {
+	try {
+		let sql, value, rs, r, fid;
+		sql = `INSERT INTO gallery SET title=?, content=?, writer=?, uid=?`;
+		value = [req.body.title, req.body.content, req.body.writer, req.session.user.id];
+		rs = await pool.query(sql, value);
+		fid = rs[0].insertId;
+		if(req.files) {
 		for(let v of req.files) {
 			sql = `INSERT INTO gallery_file SET savefile=?, orifile=?, fid=?`;
 			value = [v.filename, v.originalname, fid];
 			await pool.query(sql, value);
+			}
+		res.redirect('/gallery');
 		}
 	}
-	res.redirect('/gallery');
+	catch {
+		next(err(e.message || e))
+	}
 });
 
 router.get('/api/view/:id', async (req, res, next) => {
@@ -79,7 +130,7 @@ router.get('/api/view/:id', async (req, res, next) => {
 		res.json(rs);
 	}
 	catch(e) {
-		next(err(e.message || e))
+		res.json(new Error(e.message || e))
 	}
 })
 

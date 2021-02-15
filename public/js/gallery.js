@@ -59,7 +59,7 @@ function onModalShow(el, e, id) {
 	$(".modal-wrapper").addClass('active')
 	$('.modal-wrapper .loader').show();
 	$('.modal-wrapper .modal-wrap').removeClass('active');
-	$.get('/gallery/api/view/'+id, function(r){ //
+	$.get('/gallery/api/view/'+id, function(err, r){ //
 		for(var i in r.src) {
 			swiperSrc = r.src;
 			console.log(r);
