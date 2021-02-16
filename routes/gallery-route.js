@@ -1,5 +1,6 @@
 const express = require('express');
 const moment = require('moment');
+const _ = require('lodash')
 const path = require('path');
 const fs = require('fs-extra');
 const ip = require('request-ip');
@@ -8,7 +9,6 @@ const { pool, sqlMiddle: sql } = require('../modules/mysql-pool');
 const { err, alert, extName, srcPath, realPath, datetime } = require('../modules/util');
 const pagers = require('../modules/pagers');
 const { isUser, isGuest } = require('../modules/auth');
-const { upperFirst } = require('lodash');
 const router = express.Router();
 const pugs = {
 	css: 'gallery', 
@@ -21,7 +21,27 @@ const pugs = {
 //get은 /:id, post는 input type hidden으로
 router.post('/update', isUser, uploadImg.array('upfile'), async (req, res, next) => {
 	try {
-		res.json(req.file)
+		let sql, rs, r, value;
+		let delfile = JSON.parse(req.body.delfile);
+		for(let v of req.files) {
+			let id = _.find(delfile, {name: v.originalname}).id
+			if(id) {
+				sql = 'SELECT savefile FROM gallery_file WHERE id='+id
+				r = await pool.query(sql)
+				await fs.remove(realPath(r[0][0].savefile))
+				sql = 'DELETE FROM gallery_file WHERE id='+id
+				await pool.query(sql)
+			}
+		}
+		sql = 'UPDATE gallery SET title=?, writer=?, content=? WHERE id=?'
+		value = [req.body.title, req.body.writer, req.body.content, req.body.id]
+		r = await pool.query(sql, value)
+		for(let v of req.files) {
+			sql = 'INSERT INTO gallery_file SET savefile=?, orifile=?, fid=?'
+			value = [v.filename, v.originalname, req.body.id]
+			await pool.query(sql, value)
+		}
+		res.redirect('/gallery')
 	}
 	catch(e) {
 		next(err(e.message || e))

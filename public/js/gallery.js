@@ -82,22 +82,30 @@ function onSave(f) {
 	} */
 	if($(f).attr('name') == 'changeForm') {
 		// create, change 둘 다 onSave 사용하므로 여기서 change 폼을 구분(change는 기존 파일도 신경써야)
-		if(f.upfile.length) {
-			for(var i=0; i<f.upfile.length; i++) {
-				if(f.upfile[i].files.length == 1) {
-					f.upfile[i].files.id = $(f.upfile[i]).data('id'); //changForm에 data-id=${v.id}, 바꿀 사진으로 id바꿈
-					console.log(f.upfile[i].files)
-				}
-			}
-		}
-		else {
-			if(f.upfile.files.length == 1) {
-				f.upfile.files.id = $(f.upfile).data('id');
-				console.log(f.upfile.files)
+		addFile(f);
+	}
+	return true;
+}
+
+function addFile(f) {
+	var delfile = [];
+	if(f.upfile.length) {
+		for(var i=0; i<f.upfile.length; i++) {
+			if(f.upfile[i].files.length == 1) {
+				delfile.push({name: f.upfile[i].files[0].name, id: f.upfile[i].dataset.id})
+				//f.upfile[i].files.id = $(f.upfile[i]).data('id');
+				//changForm에 data-id=${v.id}, 바꿀 사진으로 id바꿈
 			}
 		}
 	}
-	return true;
+	else {
+		if(f.upfile.files.length == 1) {
+			delfile.push({name: f.upfile.files[0].name, id: f.upfile.dataset.id})
+			//f.upfile.files.id = $(f.upfile).data('id');
+			//console.log(f.upfile.files)
+		}
+	}
+	f.delfile.value = JSON.stringify(delfile);
 }
 
 function fileValid(f) {
@@ -140,10 +148,10 @@ function onModalShow(el, e, id) {
 		}
 	}) */
 
-	$.get('/gallery/api/view/'+id, function(err, r){ //
+	$.get('/gallery/api/view/'+id, function(r){
+		swiperSrc = r.src;
+		console.log(r);
 		for(var i in r.src) {
-			swiperSrc = r.src;
-			console.log(r);
 			html += '<div class="swiper-slide">'
 			html += '<img class="mw-100" src="'+r.src[i]+'" alt="image">'
 			html += '</div>'
@@ -154,8 +162,8 @@ function onModalShow(el, e, id) {
 		$('.modal-wrapper .info-wrapper .content').eq(2).html(r.created);
 		$('.modal-wrapper .info-wrapper .content').eq(3).html(r.content);
 		if(r.src.length == 0) {
-			$('.modal-wrapper .fa-download').hide();
 			$('.modal-wrapper .fa-info-circle').css('font-size','3em');
+			$('.modal-wrapper .fa-download').hide();
 		}
 		else {
 			$('.modal-wrapper .fa-download').show();

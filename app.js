@@ -22,7 +22,7 @@ app.locals.pretty = true;
 
 /*********** POST/Body ***********/
 app.use(express.json())
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({extended: true}))
 //body를 parsing, 미들웨어(use)
 
 /*********** Session ***********/
