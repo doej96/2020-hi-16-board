@@ -77,6 +77,26 @@ function onSave(f) {
 		alert("첨부파일은 1개 이상 등록하셔야 합니다.");
 		return false;
 	}
+	/* for(var i=0; i<f.upfile.length; i++) {
+		console.log(f.upfile[i].files); //files는 객체
+	} */
+	if($(f).attr('name') == 'changeForm') {
+		// create, change 둘 다 onSave 사용하므로 여기서 change 폼을 구분(change는 기존 파일도 신경써야)
+		if(f.upfile.length) {
+			for(var i=0; i<f.upfile.length; i++) {
+				if(f.upfile[i].files.length == 1) {
+					f.upfile[i].files.id = $(f.upfile[i]).data('id'); //changForm에 data-id=${v.id}, 바꿀 사진으로 id바꿈
+					console.log(f.upfile[i].files)
+				}
+			}
+		}
+		else {
+			if(f.upfile.files.length == 1) {
+				f.upfile.files.id = $(f.upfile).data('id');
+				console.log(f.upfile.files)
+			}
+		}
+	}
 	return true;
 }
 
