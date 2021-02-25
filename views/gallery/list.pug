@@ -1,6 +1,6 @@
 extends ../layout/layout-default
-block css
-	link(rel="stylesheet", href="/css/swiper-bundle.min.css")
+block css 
+	link(rel="stylesheet" href="/css/swiper-bundle.min.css")
 block js 
 	script(src="/js/imagesloaded.pkgd.min.js")
 	script(src="/js/masonry.pkgd.min.js")
@@ -10,23 +10,20 @@ block content
 		ul.grid
 			li.grid-sizer
 			each v in rs
-				li.grid-item(onclick=`onModalShow(this, event, ${v.id})`) 
+				li.grid-item(onclick=`onModalShow(this, event, ${v.id})`)
+					img.w-100(src=`${v.src[0]}` alt="img")
 					.grid-inside
-						if v.src[1]
-							img.w-100.ani(src=`${v.src[0]}` alt="img")
-						else
-							img.w-100(src=`${v.src[0]}` alt="img")
-						if v.src[1]
-							img.w-100.ani(src=`${v.src[1]}` alt="img")
-					.grid-info(onclick="event.stopPropagation()")
-						i.fa.fa-edit(onclick=`onEdit(this, event, ${v.id})`)  
-						i.fa.fa-trash-alt(onclick=`onDelete(this, event, ${v.id})`)  
-						i.fa.fa-ellipsis-h(onclick=`onModalShow(this, event, ${v.id})`)  
+						.ani(style=`background-image: url(${v.src[0]})`)
+						.ani(style=`background-image: url(${v.src[1] || v.src[0]})`)
+					.grid-info(onclick="event.stopPropagation();")
+						i.fa.fa-edit(onclick=`onEdit(this, event, ${v.id})`) 
+						i.fa.fa-trash-alt(onclick=`onDelete(this, event, ${v.id})`) 
+						i.fa.fa-ellipsis-h(onclick=`onModalShow(this, event, ${v.id})`) 
 		include ../include/pager
 		if user.id
 			.text-center.py-3
 				a.btn.btn-success(href="/gallery/create") 글쓰기
-	.modal-wrapper(onclick="onModalHide();" style="display: none;")
+	.modal-wrapper(onclick="onModalHide()" style="display: none;")
 		.loader.fa.fa-spinner.fa-spin
 		.bt-close.bt-red
 			i.fa.fa-times
@@ -48,10 +45,10 @@ block content
 					.content
 		.modal-wrap(onclick="event.stopPropagation()")
 			.swiper-container 
-				.swiper-wrapper
+				.swiper-wrapper 
 			.bts 
 				.bt 
 					i.fa.fa-info-circle(onclick="onInfoShow();")
 				.bt 
-					i.fa.fa-download(onclick="onDownload()")
+					i.fa.fa-download(onclick="onDownload();")
 			.swiper-pagination
