@@ -3,10 +3,10 @@ const moment = require('moment');
 const path = require('path');
 const fs = require('fs-extra');
 const ip = require('request-ip');
-const { upload, imgExt } = require('../modules/multer');
+const { upload, imgExt } = require('../modules/multers');
 const { pool, sqlGen: sql } = require('../modules/mysql-pool');
 const { err, alert, extName, srcPath, realPath } = require('../modules/util');
-const pagers = require('../modules/pager');
+const pagers = require('../modules/pagers');
 const { isUser, isGuest } = require('../modules/auth');
 const router = express.Router();
 
