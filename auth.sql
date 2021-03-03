@@ -21,12 +21,122 @@ USE `eunjeong`;
 CREATE TABLE IF NOT EXISTS `auth` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `userid` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `userpw` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `username` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `grade` tinyint unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- 내보낼 데이터가 선택되어 있지 않습니다.
+
+-- 테이블 eunjeong.board 구조 내보내기
+CREATE TABLE IF NOT EXISTS `board` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `content` text,
+  `writer` varchar(255) DEFAULT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `orifile` varchar(255) DEFAULT NULL,
+  `savefile` varchar(255) DEFAULT NULL,
+  `readnum` int unsigned NOT NULL DEFAULT '0',
+  `uid` int unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_board_auth` (`uid`),
+  CONSTRAINT `FK_board_auth` FOREIGN KEY (`uid`) REFERENCES `auth` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- 내보낼 데이터가 선택되어 있지 않습니다.
+
+-- 테이블 eunjeong.board_ip 구조 내보내기
+CREATE TABLE IF NOT EXISTS `board_ip` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `ip` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `bid` int unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `bid` (`bid`),
+  CONSTRAINT `FK__board` FOREIGN KEY (`bid`) REFERENCES `board` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- 내보낼 데이터가 선택되어 있지 않습니다.
+
+-- 테이블 eunjeong.books 구조 내보내기
+CREATE TABLE IF NOT EXISTS `books` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `writer` varchar(255) DEFAULT NULL,
+  `wdate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- 내보낼 데이터가 선택되어 있지 않습니다.
+
+-- 테이블 eunjeong.city 구조 내보내기
+CREATE TABLE IF NOT EXISTS `city` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `country` varchar(255) DEFAULT NULL,
+  `summary` text,
+  `lat` float unsigned DEFAULT NULL,
+  `lon` float unsigned DEFAULT NULL,
+  `population` int unsigned DEFAULT NULL,
+  `sdate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- 내보낼 데이터가 선택되어 있지 않습니다.
+
+-- 테이블 eunjeong.gallery 구조 내보내기
+CREATE TABLE IF NOT EXISTS `gallery` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `writer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `readnum` int unsigned NOT NULL DEFAULT '0',
+  `uid` int unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `FK_board_auth` (`uid`) USING BTREE,
+  CONSTRAINT `gallery_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `auth` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+
+-- 내보낼 데이터가 선택되어 있지 않습니다.
+
+-- 테이블 eunjeong.gallery_file 구조 내보내기
+CREATE TABLE IF NOT EXISTS `gallery_file` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `orifile` varchar(255) NOT NULL,
+  `savefile` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fid` int unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `gid` (`fid`) USING BTREE,
+  CONSTRAINT `FK_gallery_file_gallery` FOREIGN KEY (`fid`) REFERENCES `gallery` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- 내보낼 데이터가 선택되어 있지 않습니다.
+
+-- 테이블 eunjeong.gallery_ip 구조 내보내기
+CREATE TABLE IF NOT EXISTS `gallery_ip` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `ip` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `bid` int unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `bid` (`bid`) USING BTREE,
+  CONSTRAINT `FK_gallery_ip_gallery` FOREIGN KEY (`bid`) REFERENCES `gallery` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+
+-- 내보낼 데이터가 선택되어 있지 않습니다.
+
+-- 테이블 eunjeong.sessions 구조 내보내기
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `session_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `expires` int unsigned NOT NULL,
+  `data` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+  PRIMARY KEY (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
